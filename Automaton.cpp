@@ -9,10 +9,20 @@ using namespace std;
 
 Automaton::Automaton(int rule) {
     // set thisGen to ooxoo
+    this->thisGen.push_back(0);
+    this->thisGen.push_back(0);
+    this->thisGen.push_back(1);
+    this->thisGen.push_back(0);
+    this->thisGen.push_back(0);
 
-    // binary rule and set to rule vector 
+    // binary-ize rule set to rule vector 
+    this->setRule(rule);
 
     // set displaywidth to 79
+    this->displayWidth = DEFAULT_DISPLAY_WIDTH;
+
+    // set extremebit 
+    this->extremeBit = 0;
 }
 
 bool Automaton::setDisplayWidth(int width) {
@@ -53,5 +63,25 @@ bool Automaton::setRule(int rule) {
         backwards -= 1;
 
     }
+
+    // TODO: remove this, just for debugging 
+    for (int j=0; j < this->rules.size(); ++j) {
+        cout << "RULE POSITION: " << j + 1 << " " << this->rules.at(j) << endl;
+    }
+
+    return true;
 }
 
+void Automaton::resetToFirstGen() {
+
+    // clear whatever is inside thisGen
+    this->thisGen.clear();
+
+    // propagate thisGen with initial seed
+    this->thisGen.push_back(0);
+    this->thisGen.push_back(0);
+    this->thisGen.push_back(1);
+    this->thisGen.push_back(0);
+    this->thisGen.push_back(0);
+
+}
