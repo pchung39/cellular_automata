@@ -35,7 +35,7 @@ using namespace std;
 
 int main()
 {
-   int rule, k;
+   int rule;
 
    // get rule from user
    do

@@ -43,7 +43,7 @@ bool Automaton::setDisplayWidth(int width) {
 
 bool Automaton::setRule(int rule) {
 
-    int backwards = 7
+    int backwards = 7;
 
     string binary = bitset<8>(rule).to_string();
     int n = binary.length(); 
@@ -52,11 +52,12 @@ bool Automaton::setRule(int rule) {
 
 
     for (int i=0; char_array[i] != 0; ++i) {
-        
-        if (char_array[i] == 0) {
+        if (char_array[i] == '0') {
+            cout << "char was 0" << endl;
             rules[backwards] = false;
         }
         else {
+            cout << "char was 1" << endl;
             rules[backwards] = true;
         }
 
@@ -64,12 +65,23 @@ bool Automaton::setRule(int rule) {
 
     }
 
-    // TODO: remove this, just for debugging 
-    for (int j=0; j < this->rules.size(); ++j) {
-        cout << "RULE POSITION: " << j + 1 << " " << this->rules.at(j) << endl;
-    }
+    // // TODO: remove this, just for debugging 
+    // for (int j=0; j < 8; ++j) {
+    //     cout << "RULE BOOL " << j + 1 << " " << this->rules[j] << endl;
+    // }
 
     return true;
+}
+
+void Automaton::propagateNewGen() {
+
+}
+
+
+string Automaton::toStringCurrentGen(char charFor0, char charFor1) const {
+    
+    
+    return ""
 }
 
 void Automaton::resetToFirstGen() {
