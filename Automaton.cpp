@@ -2,6 +2,7 @@
 #include <bitset>
 #include <string>
 #include <sstream>
+#include <vector>
 #include "Automaton.h"
 
 using namespace std; 
@@ -75,13 +76,36 @@ bool Automaton::setRule(int rule) {
 
 void Automaton::propagateNewGen() {
 
+    //char char_array[];
+
+    // fill in thisGen with extreme bits until reached displayWidth
+
+    while (this->thisGen.size() <= 79) {
+        this->thisGen.insert(this->thisGen.begin(), this->extremeBit);
+        this->thisGen.push_back(this->extremeBit);
+    }
+
+
 }
 
 
 string Automaton::toStringCurrentGen(char charFor0, char charFor1) const {
     
-    
-    return ""
+    string response;
+
+    for (int i=0; i < this->thisGen.size(); ++i) {
+        if (this->thisGen.at(i) == 0) {
+            response += charFor0;
+        }
+        else {
+            response += charFor1;
+        }
+    }
+
+    cout << "HERE'S YOUR GEN:" << endl;
+    cout << response << endl;
+
+    return response;
 }
 
 void Automaton::resetToFirstGen() {
