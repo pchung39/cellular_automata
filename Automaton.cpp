@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <iostream>
 #include <bitset>
 #include <string>
@@ -9,12 +10,6 @@ using namespace std;
 
 
 Automaton::Automaton(int rule) {
-    // set thisGen to ooxoo
-    this->thisGen.push_back(0);
-    this->thisGen.push_back(0);
-    this->thisGen.push_back(1);
-    this->thisGen.push_back(0);
-    this->thisGen.push_back(0);
 
     // binary-ize rule set to rule vector 
     this->setRule(rule);
@@ -24,6 +19,20 @@ Automaton::Automaton(int rule) {
 
     // set extremebit 
     this->extremeBit = 0;
+
+    // set thisGen to ooxoo
+    this->thisGen.push_back(1);
+
+    // set extremeBit to rule 000
+    //this->extremeBit = this->rules[0];
+    cout << "Extreme: " << this->extremeBit << endl;
+
+    // at the end, pad with extreme bits 
+    while (this->thisGen.size() <= this->displayWidth) {
+        this->thisGen.insert(this->thisGen.begin(), this->extremeBit);
+        this->thisGen.push_back(this->extremeBit);
+    }
+
 }
 
 bool Automaton::setDisplayWidth(int width) {
@@ -51,14 +60,11 @@ bool Automaton::setRule(int rule) {
     char char_array[n + 1]; 
     strcpy(char_array, binary.c_str()); 
 
-
     for (int i=0; char_array[i] != 0; ++i) {
         if (char_array[i] == '0') {
-            cout << "char was 0" << endl;
             rules[backwards] = false;
         }
         else {
-            cout << "char was 1" << endl;
             rules[backwards] = true;
         }
 
@@ -66,26 +72,79 @@ bool Automaton::setRule(int rule) {
 
     }
 
-    // // TODO: remove this, just for debugging 
-    // for (int j=0; j < 8; ++j) {
-    //     cout << "RULE BOOL " << j + 1 << " " << this->rules[j] << endl;
-    // }
-
     return true;
 }
 
 void Automaton::propagateNewGen() {
 
-    //char char_array[];
 
-    // fill in thisGen with extreme bits until reached displayWidth
+    vector<int> newGen;
 
-    while (this->thisGen.size() <= 79) {
+    int end = 2;
+    int start = 0;
+    while (end <= this->thisGen.size() - 1) {
+        string subGen;
+
+        // get the triplet
+        for (int i=start; i <= end; ++i) {
+            //cout << this->thisGen.at(i) << endl;
+            cout << "at i: " << this->thisGen.at(i) << endl;
+            subGen += to_string(this->thisGen.at(i));
+        }
+
+        cout << "Start " << start << " , " << "End " << end << " " << "sub: " <<  subGen << endl;
+
+        // evaluate new generation with subGen 
+            if (subGen == "111") {
+                newGen.push_back(this->rules[7]);
+                break;
+            }
+            else if (subGen == "110") {
+                newGen.push_back(this->rules[6]);
+                break;
+            }
+            else if (subGen == "101") {
+                newGen.push_back(this->rules[5]);
+                break;
+            }
+            else if (subGen == "100") {
+                newGen.push_back(this->rules[4]);
+                break; 
+            }
+            else if (subGen == "011") {
+                newGen.push_back(this->rules[3]);
+                break;
+            }
+            else if (subGen == "010") {
+                newGen.push_back(this->rules[2]);
+                break;
+            }
+            else if (subGen == "001") {
+                newGen.push_back(this->rules[1]);
+                break;
+            }
+            else if (subGen == "000") {
+                newGen.push_back(this->rules[0]);
+                break;
+            }
+
+
+        start += 1;
+        end += 1;
+
+    }
+
+    // set thisGen as newGen
+    this->thisGen = newGen;
+
+    // set extremeBit to rule 000
+    this->extremeBit = this->rules[0];
+
+    // at the end, pad with extreme bits 
+    while (this->thisGen.size() <= this->displayWidth) {
         this->thisGen.insert(this->thisGen.begin(), this->extremeBit);
         this->thisGen.push_back(this->extremeBit);
     }
-
-
 }
 
 
@@ -101,9 +160,6 @@ string Automaton::toStringCurrentGen(char charFor0, char charFor1) const {
             response += charFor1;
         }
     }
-
-    cout << "HERE'S YOUR GEN:" << endl;
-    cout << response << endl;
 
     return response;
 }

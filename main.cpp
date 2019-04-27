@@ -35,7 +35,7 @@ using namespace std;
 
 int main()
 {
-   int rule;
+   int rule, k;
 
    // get rule from user
    do
@@ -46,19 +46,25 @@ int main()
 
    // create automaton with this rule and single central dot
    Automaton* aut = new Automaton(rule);
-   aut->propagateNewGen();
-   cout << "GEN: " << endl;
-   cout << aut->toStringCurrentGen('o', '*') << endl;
+   //aut->propagateNewGen();
+   //cout << "GEN: " << endl;
+   //cout << aut->toStringCurrentGen('o', '*') << endl;
    // now show it
    // cout << "   start"  << endl;
-   // for (k = 0; k < 100; k++)
-   // {
+   for (k = 0; k < 5; k++)
+   {
 
-   //    cout << aut.toStringCurrentGen() << endl;
-   //    aut.propagateNewGeneration();
-   // }
+      cout << aut->toStringCurrentGen('o', '*') << endl;
+      aut->propagateNewGen();
+   }
    // cout << "   end"  << endl;
    
    return 0;
+
+   // ooxoo
+
+   // 0-2 -> oox
+   // 1-3 -> oxo
+   // 2-4 -> xoo
 }
 
