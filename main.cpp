@@ -46,20 +46,26 @@ int main()
 
    // create automaton with this rule and single central dot
    Automaton* aut = new Automaton(rule);
-   //aut->propagateNewGen();
+   // cout << aut->toStringCurrentGen('o', '*') << endl;
+   // aut->propagateNewGen();
+   // cout << aut->toStringCurrentGen('o', '*') << endl;
    //cout << "GEN: " << endl;
-   //cout << aut->toStringCurrentGen('o', '*') << endl;
+
    // now show it
    // cout << "   start"  << endl;
-   for (k = 0; k < 5; k++)
+   for (k = 0; k < 25; k++)
    {
-
-      cout << aut->toStringCurrentGen('o', '*') << endl;
+      cout << aut->toStringCurrentGen('.', '*') << endl;
       aut->propagateNewGen();
    }
    // cout << "   end"  << endl;
-   
-   return 0;
+   // aut->setDisplayWidth(150);
+   // for (k = 0; k < 10; k++)
+   // {
+   //    cout << aut->toStringCurrentGen('o', '*') << endl;
+   //    aut->propagateNewGen();
+   // }
+   // return 0;
 
    // ooxoo
 
@@ -68,3 +74,9 @@ int main()
    // 2-4 -> xoo
 }
 
+
+// ooooooooooooooooooooooooooooooooooooooo*ooooooooooooooooooooooooooooooooooooooo
+// oooooooooooooooooooooooooooooooooooooo***oooooooooooooooooooooooooooooooooooooo
+// ooooooooooooooooooooooooooooooooooooo**oo*ooooooooooooooooooooooooooooooooooooo
+// oooooooooooooooooooooooooooooooooooo**o****oooooooooooooooooooooooooooooooooooo
+// ooooooooooooooooooooooooooooooooooo**oo*ooo*ooooooooooooooooooooooooooooooooooo
