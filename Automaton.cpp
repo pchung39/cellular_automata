@@ -64,6 +64,7 @@ bool Automaton::setRule(int rule) {
         int backwards = 7;
 
         string binary = bitset<8>(rule).to_string();
+        // cout << "BIN " << binary << endl;
         int n = binary.length(); 
         char char_array[n + 1]; 
         strcpy(char_array, binary.c_str()); 
@@ -88,11 +89,12 @@ bool Automaton::setRule(int rule) {
 void Automaton::propagateNewGen() {
 
     // pad four zeros on thisgen 
-    this->thisGen.insert(this->thisGen.begin(), 0);
-    this->thisGen.insert(this->thisGen.begin(), 0);
-    this->thisGen.push_back(0);  
-    this->thisGen.push_back(0);  
+    this->thisGen.insert(this->thisGen.begin(), this->extremeBit);
+    this->thisGen.insert(this->thisGen.begin(), this->extremeBit);
+    this->thisGen.push_back(this->extremeBit);  
+    this->thisGen.push_back(this->extremeBit);  
 
+    // cout << "EVALUATING THIS GEN: " << endl;
     // for (int i=0; i< this->thisGen.size(); ++i) {
     //     cout << this->thisGen.at(i);
     // }
@@ -157,13 +159,12 @@ void Automaton::propagateNewGen() {
                 newGen.push_back(this->rules[0]);
             }
 
-
         start += 1;
         end += 1;
 
     }
 
-    // DEBUG STATEMENT: see binary for new gen
+    // // DEBUG STATEMENT: see binary for new gen
     // cout << "NEW GEN: " << endl;
     // for (int k=0; k< newGen.size(); ++k) {
     //     cout << newGen.at(k);
@@ -201,36 +202,77 @@ string Automaton::toStringCurrentGen(char charFor0, char charFor1) const {
     }
 
     // compute padding total
-    totalPad = displayWidth - this->thisGen.size();
-    //cout << "totalPad: " << totalPad << endl;
-    leftPad = totalPad / 2;
-    //cout << "LEFT: " << leftPad << endl;
-    rightPad = totalPad / 2;
-    //cout <<"RIGHT: " << rightPad << endl;
+    if (this->thisGen.size() <= this->displayWidth) {
+        totalPad = displayWidth - this->thisGen.size();
+        //cout << "totalPad: " << totalPad << endl;
+        leftPad = totalPad / 2;
+        //cout << "LEFT: " << leftPad << endl;
+        rightPad = totalPad / 2;
+        //cout <<"RIGHT: " << rightPad << endl;
 
-    // create leftPad
-    for (int left=0; left < leftPad; ++left) {
-        if (this->extremeBit == 0) {
-            leftTotalPad += charFor0;
+        // create leftPad
+        for (int left=0; left < leftPad; ++left) {
+            if (this->extremeBit == 0) {
+                leftTotalPad += charFor0;
+            }
+            else {
+                leftTotalPad += charFor1;
+            }
         }
-        else {
-            leftTotalPad += charFor1;
+
+        // create rightPad
+        for (int right=0; right< rightPad; ++right) {
+            if (this->extremeBit == 0) {
+                rightTotalPad += charFor0;
+            }
+            else {
+                rightTotalPad += charFor1;
+            }
         }
+
+        totalResponse = leftTotalPad + response + rightTotalPad;
+        return totalResponse;
     }
+    else {
+        //cout << "LARGE: " << response.length() << endl;
+        while (response.length() > this->displayWidth) {
+            response.erase(0,1);
+            response.erase(response.length() - 1);
+            //cout << "reduced: " << response.length() << endl;
+        }
 
-    // create rightPad
-    for (int right=0; right< rightPad; ++right) {
-        if (this->extremeBit == 0) {
-            rightTotalPad += charFor0;
-        }
-        else {
-            rightTotalPad += charFor1;
-        }
+
+        return response;
     }
+    // totalPad = displayWidth - this->thisGen.size();
+    // //cout << "totalPad: " << totalPad << endl;
+    // leftPad = totalPad / 2;
+    // //cout << "LEFT: " << leftPad << endl;
+    // rightPad = totalPad / 2;
+    // //cout <<"RIGHT: " << rightPad << endl;
 
-    totalResponse = leftTotalPad + response + rightTotalPad;
+    // // create leftPad
+    // for (int left=0; left < leftPad; ++left) {
+    //     if (this->extremeBit == 0) {
+    //         leftTotalPad += charFor0;
+    //     }
+    //     else {
+    //         leftTotalPad += charFor1;
+    //     }
+    // }
 
-    return totalResponse;
+    // // create rightPad
+    // for (int right=0; right< rightPad; ++right) {
+    //     if (this->extremeBit == 0) {
+    //         rightTotalPad += charFor0;
+    //     }
+    //     else {
+    //         rightTotalPad += charFor1;
+    //     }
+    // }
+
+    // totalResponse = leftTotalPad + response + rightTotalPad;
+    // return totalResponse;
 }
 
 void Automaton::resetToFirstGen() {
@@ -239,10 +281,12 @@ void Automaton::resetToFirstGen() {
     this->thisGen.clear();
 
     // propagate thisGen with initial seed
-    this->thisGen.push_back(0);
-    this->thisGen.push_back(0);
+    // this->thisGen.push_back(0);
+    // this->thisGen.push_back(0);
     this->thisGen.push_back(1);
-    this->thisGen.push_back(0);
-    this->thisGen.push_back(0);
+    // this->thisGen.push_back(0);
+    // this->thisGen.push_back(0);
+
+    this->extremeBit = 0;
 
 }

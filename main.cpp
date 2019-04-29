@@ -1,82 +1,57 @@
-#include <string>
+// ZyLab - Bitwise ops - 1D Cellular Automata
+// Original - Loceff, Updates, Edits, Annotations: &
+//
+// This main method is for your benefit. It will not be tested. But if you use it as
+// an example to run your own tests, the likelihood of your Automaton code passing 
+// my tests may be higher.
+// - &
+
 #include <iostream>
-#include "Automaton.h"
+#include <string>
+#include <sstream>
 
 using namespace std;
 
-// int main()
-// {
-//    int rule, k;
+#include "Automaton.h"
 
-//    // get rule from user
-//    do
-//    {
-//       cout << "Enter Rule (0 - 255): ";
-//       cin >> rule;
-//    } while (rule < 0 || rule > 255);
+// getRows will rewind aut and return its first n generations as a string
+// in which successive generations are separated by "\n". Within the strings
+// 1 is represented by * and 0 by space.
+string getRows(Automaton& aut, int n) {
+    char charFor0 = '.', charFor1 = '*';
+    stringstream ss;
 
-//    // create automaton with this rule and single central dot
-//    Automaton 
-//       aut(rule);
-
-//    // now show it
-//    cout << "   start"  << endl;
-//    for (k = 0; k < 100; k++)
-//    {
-
-//       cout << aut.toStringCurrentGen() << endl;
-//       aut.propagateNewGeneration();
-//    }
-//    cout << "   end"  << endl;
-   
-//    return 0;
-// }
-
+    aut.resetToFirstGen();  // rewind
+    
+    while (--n >= 0) {
+        ss << aut.toStringCurrentGen(charFor0, charFor1) << "\n";
+        aut.propagateNewGen();
+    }
+    return ss.str();
+}
 
 int main()
 {
-   int rule, k;
-
-   // get rule from user
-   do
-   {
-      cout << "Enter Rule (0 - 255): ";
-      cin >> rule;
-   } while (rule < 0 || rule > 255);
-
-   // create automaton with this rule and single central dot
-   Automaton* aut = new Automaton(rule);
-   // cout << aut->toStringCurrentGen('o', '*') << endl;
-   // aut->propagateNewGen();
-   // cout << aut->toStringCurrentGen('o', '*') << endl;
-   //cout << "GEN: " << endl;
-
-   // now show it
-   // cout << "   start"  << endl;
-   for (k = 0; k < 25; k++)
-   {
-      cout << aut->toStringCurrentGen('.', '*') << endl;
-      aut->propagateNewGen();
-   }
-   // cout << "   end"  << endl;
-   // aut->setDisplayWidth(150);
-   // for (k = 0; k < 10; k++)
-   // {
-   //    cout << aut->toStringCurrentGen('o', '*') << endl;
-   //    aut->propagateNewGen();
-   // }
-   // return 0;
-
-   // ooxoo
-
-   // 0-2 -> oox
-   // 1-3 -> oxo
-   // 2-4 -> xoo
+    int rule;
+    string userInput;
+        
+    cout << "Enter Rule (" << Automaton::MIN_RULE << " - " << Automaton::MAX_RULE << "): ";
+    getline(cin, userInput);
+    istringstream(userInput) >> rule;
+    
+    if (rule < Automaton::MIN_RULE || rule > Automaton::MAX_RULE) {
+       cerr << "Sorry. That was an invalid rule number." <<endl;
+       exit(1);
+    }
+    
+    // Make the automaton and print its first 100 rows on cout
+    Automaton aut(rule);
+    cout << getRows(aut, 40) << endl;
+    
+    // TODO - run other tests to cover corner cases, limit checking, etc.
+    /* Type your code here */
 }
 
+//11010011
 
-// ooooooooooooooooooooooooooooooooooooooo*ooooooooooooooooooooooooooooooooooooooo
-// oooooooooooooooooooooooooooooooooooooo***oooooooooooooooooooooooooooooooooooooo
-// ooooooooooooooooooooooooooooooooooooo**oo*ooooooooooooooooooooooooooooooooooooo
-// oooooooooooooooooooooooooooooooooooo**o****oooooooooooooooooooooooooooooooooooo
-// ooooooooooooooooooooooooooooooooooo**oo*ooo*ooooooooooooooooooooooooooooooooooo
+
